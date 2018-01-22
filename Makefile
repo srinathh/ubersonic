@@ -1,6 +1,6 @@
 GOPATH:=GOPATH=$(shell pwd)/vendor
 GOENV:=$(GOPATH)
-GOFILES:=$(wildcard src/*.go)
+GOFILES:= "./src/api.go ./src/dbops.go ./main.go subsonic_objects.go"
 
 all: clean godeps build-server build-indexer install
 
@@ -13,8 +13,8 @@ godeps:
 build-server: $(GOFILES)
 	$(GOENV) go build -o bin/ubersonic-server $(GOFILES)
 
-build-indexer: src/indexer.cpp
-	gcc src/indexer.cpp -Wall -std=c++11 -ltag -lstdc++ -lsqlite3 -g -o bin/ubersonic-indexer
+build-indexer: src/indexer.go
+	$(GOENV) go build -o bin/ubersonic-indexer ./src/indexer.go
 
 install:
 	mkdir -p /opt/ubersonic/bin
